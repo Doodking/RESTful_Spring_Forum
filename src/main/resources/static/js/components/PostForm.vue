@@ -10,10 +10,10 @@
 </template>
 
 <script>
-    import { sendPost } from 'util/ws'
+    import { mapActions } from 'vuex'
 
     export default {
-        props: ['posts', 'postAttr'],
+        props: ['postAttr'],
         data(){
               return{
                 text: '',
@@ -27,8 +27,17 @@
             }
         },
         methods: {
+            ...mapActions(['updatePostAction', 'addPostAction']),
             save(){
-                sendPost({id: this.id, text: this.text})
+                const post = {
+                    id: this.id,
+                    text: this.text
+                }
+                if (this.id) {
+                    this.updatePostAction(post)
+                } else {
+                    this.addPostAction(post)
+                }
                 this.text = ''
                 this.id = ''
 

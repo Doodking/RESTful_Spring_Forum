@@ -13,14 +13,16 @@
 </template>
 
 <script>
+    import { mapActions } from 'vuex'
     export default {
-        props: ['post', 'editPost', 'deletePost', 'posts'],
+        props: ['post', 'editPost', 'deletePost'],
         methods: {
+            ...mapActions(['removePostAction']),
             edit(){
                 this.editPost(this.post)
             },
             del(){
-                this.deletePost(this.post)
+                this.removePostAction(this.post)
             }
         }
     }

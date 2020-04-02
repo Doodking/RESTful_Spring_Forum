@@ -29,7 +29,7 @@
             <v-container v-if="!user">Авторизуйтесь, пожалуйста <a href="/login">Google</a>
             </v-container>
             <v-container v-if="user">
-                <posts-list :posts="posts" />
+                <posts-list  />
             </v-container>
         </v-content>
         <v-footer class="mt-6" dark padless>
@@ -64,40 +64,29 @@
 </template>
 
 <script>
+    import { mapState, mapMutations } from 'vuex';
     import PostsList from 'components/PostList.vue'
     import { addHandler } from 'util/ws'
+
+
     export default {
         components: {
             PostsList
         },
-        data(){
-            return{
-                icons: [
-                    'fab fa-facebook',
-                    'fab fa-twitter',
-                    'fab fa-google-plus',
-                    'fab fa-linkedin',
-                    'fab fa-instagram',
-                ],
-                posts: frontEndData.posts,
-                user: frontEndData.user
-            }
-        },
+        computed: mapState(['user', 'icons']),
+        methods: mapMutations(['addPostMutation', 'updatePostMutation', 'removePostMutation']),
         created(){
             addHandler(data => {
-                if (data.objectType === 'POST') {
-                    const index = this.posts.findIndex(item => item.id === data.body.id)
+                if (data.objectType === 'MESSAGE') {
                     switch (data.eventType) {
                         case 'CREATE':
+                            this.addPostMutation(data.body)
+                            break
                         case 'UPDATE':
-                            if (index > -1) {
-                                this.posts.splice(index, 1, data.body)
-                            } else {
-                                this.posts.push(data.body)
-                            }
+                            this.updatePostMutation(data.body)
                             break
                         case 'REMOVE':
-                            this.posts.splice(index, 1)
+                            this.removePostMutation(data.body)
                             break
                         default:
                             console.error(`Looks like the event type if unknown "${data.eventType}"`)
