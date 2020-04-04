@@ -18,7 +18,7 @@ export default new Vuex.Store({
     user: frontEndData.user
   },
   getters: {
-        sortedPosts: state => state.posts.sort((a,b) => -(a.id - b.id))
+        sortedPosts: state => (state.posts || []).sort((a,b) => -(a.id - b.id))
   },
   mutations: {
     addPostMutation (state, post) {
@@ -43,7 +43,22 @@ export default new Vuex.Store({
                 ...state.posts.slice(deleteIndex + 1)
             ]
           }
-    }
+    },
+    addCommentMutation (state, comment) {
+              const updateIndex = state.posts.findIndex(item => item.id === comment.post.id)
+              const post = state.posts[updateIndex]
+              state.posts = [
+                ...state.posts.slice(0, updateIndex),
+                {
+                ...comment,
+                comments: [
+                    ...post.comments,
+                    comment
+                ]
+                },
+                ...state.posts.slice(updateIndex + 1)
+              ]
+        },
   },
   actions: {
     async addPostAction({commit, state}, post){

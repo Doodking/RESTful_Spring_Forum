@@ -30,6 +30,18 @@ public class Post {
     @JsonView(View.Full.class)
     private LocalDateTime creationTime;
 
+    @JsonView(View.Full.class)
+    private String link;
+
+    @JsonView(View.Full.class)
+    private String linkTitle;
+
+    @JsonView(View.Full.class)
+    private String linkDescription;
+
+    @JsonView(View.Full.class)
+    private String linkCover;
+
     public Post(){}
     public Post(Integer id, String text){
         this.id = id;

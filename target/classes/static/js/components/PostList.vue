@@ -1,13 +1,15 @@
 <template>
-    <v-layout align-space-around justify-start column>
-    <post-form :postAttr="post"/>
-    <post-row
-            v-for="post in sortedPosts"
-            :post="post"
-            :key="post.id"
-            :editPost="editPost"
+    <v-container>
+        <v-layout align-space-around justify-start column>
+            <post-form :postAttr="post"/>
+            <post-row
+                    v-for="post in sortedPosts"
+                    :post="post"
+                    :key="post.id"
+                    :editPost="editPost"
             />
-    </v-layout>
+        </v-layout>
+    </v-container>
 </template>
 
 <script>

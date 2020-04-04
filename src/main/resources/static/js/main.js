@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import 'api/res'
+import router from 'router/router'
 import Babel from '@babel/polyfill'
 import store from 'store/store'
 import App from 'pages/App.vue'
@@ -15,7 +16,8 @@ Vue.use(Vuetify)
 
 new Vue({
     el: '#app',
-    store: store,
+    store,
+    router,
     vuetify: new Vuetify(),
     render: a => a(App)
 })

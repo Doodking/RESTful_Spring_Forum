@@ -1,7 +1,7 @@
 <template>
     <v-layout row>
         <v-col cols="12" sm="11">
-            <v-text-field label="New Post" placeHolder="Write something..." v-model="text" />
+            <v-text-field label="New Post" placeHolder="Write something..." v-model="text" @keyup.enter="save"/>
         </v-col>
         <v-btn class="mt-6" @click="save">
             Save

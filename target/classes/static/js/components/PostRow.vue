@@ -3,6 +3,7 @@
         <v-card-text class="white--text">
             {{ post.text }}
         </v-card-text>
+        <media v-if="post.link" :post="post"></media>
         <v-card-actions>
             <v-btn @click="edit" small text rounded class="white--text">Edit</v-btn>
             <v-btn  @click="del" small>
@@ -14,7 +15,10 @@
 
 <script>
     import { mapActions } from 'vuex'
+    import Media from 'components/media/Media.vue'
+
     export default {
+        components: { Media },
         props: ['post', 'editPost', 'deletePost'],
         methods: {
             ...mapActions(['removePostAction']),

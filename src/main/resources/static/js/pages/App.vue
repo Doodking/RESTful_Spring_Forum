@@ -1,5 +1,5 @@
 <template>
-    <v-app class="main-app">
+    <v-app class="main-app" xs6>
         <v-app-bar app class="green darken-1 white--text text-center">
             <v-avatar tile size="50" class="mr-3">
                 <img
@@ -7,18 +7,18 @@
                         alt="John"
                 >
             </v-avatar>
-            <v-toolbar-title>
-                silk road
-                anonymous marketplace
+            <v-toolbar-title class="title">
+                DUNE
             </v-toolbar-title>
             <v-spacer></v-spacer>
             <v-btn icon>
                 <v-icon>mdi-magnify</v-icon>
             </v-btn>
-            <span v-if="user">{{user.name}}  </span>
+            <v-btn text :disabled="$route.path === '/'" @click="showPosts">Posts</v-btn>
+            <v-btn text :disabled="$route.path === '/profile'" @click="showProfile" v-if="user">{{user.name}}  </v-btn>
             <v-avatar class="mx-3" v-if="user" size="36">
                 <img
-                        src= "https://im0-tub-ru.yandex.net/i?id=d6926fd5b028222906e950856cc1c6cc&n=13"
+                        :src="user.userpic"
                 >
             </v-avatar>
             <v-btn v-if="user" icon href="/logout">
@@ -26,11 +26,7 @@
             </v-btn>
         </v-app-bar>
         <v-content>
-            <v-container v-if="!user">Авторизуйтесь, пожалуйста <a href="/login">Google</a>
-            </v-container>
-            <v-container v-if="user">
-                <posts-list  />
-            </v-container>
+            <router-view></router-view>
         </v-content>
         <v-footer class="mt-6" dark padless>
             <v-card
@@ -65,16 +61,19 @@
 
 <script>
     import { mapState, mapMutations } from 'vuex';
-    import PostsList from 'components/PostList.vue'
     import { addHandler } from 'util/ws'
 
 
     export default {
-        components: {
-            PostsList
-        },
         computed: mapState(['user', 'icons']),
-        methods: mapMutations(['addPostMutation', 'updatePostMutation', 'removePostMutation']),
+        methods: {...mapMutations(['addPostMutation', 'updatePostMutation', 'removePostMutation']),
+                showPosts(){
+                    this.$router.push('/')
+                },
+                showProfile(){
+                    this.$router.push('/profile')
+                }
+        },
         created(){
             addHandler(data => {
                 if (data.objectType === 'MESSAGE') {
@@ -95,6 +94,11 @@
                     console.error(`Looks like the object type if unknown "${data.objectType}"`)
                 }
             })
+        },
+        beforeMount(){
+            if(!this.user){
+                this.$router.replace('/auth')
+            }
         }
     }
 
@@ -103,5 +107,11 @@
 <style>
 .main-app{
     color: red
+}
+.title{
+    font-size: 500px;
+    line-height: 500px;
+    font-weight: bold;
+    font-style: italic;
 }
 </style>
